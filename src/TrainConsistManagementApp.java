@@ -1,70 +1,41 @@
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class TrainConsistManagementApp {
 
-    // ✅ Bogie Model
-    public static class Bogie {
-        private String name;
-        private int capacity;
+    // ✅ Regex Patterns
+    private static final String TRAIN_ID_REGEX = "TRN-\\d{4}";
+    private static final String CARGO_CODE_REGEX = "PET-[A-Z]{2}";
 
-        public Bogie(String name, int capacity) {
-            this.name = name;
-            this.capacity = capacity;
-        }
+    private static final Pattern trainPattern = Pattern.compile(TRAIN_ID_REGEX);
+    private static final Pattern cargoPattern = Pattern.compile(CARGO_CODE_REGEX);
 
-        public String getName() {
-            return name;
-        }
+    // ✅ Validate Train ID
+    public static boolean isValidTrainID(String trainId) {
+        if (trainId == null || trainId.isEmpty()) return false;
 
-        public int getCapacity() {
-            return capacity;
-        }
-
-        @Override
-        public String toString() {
-            return name + " (Capacity: " + capacity + ")";
-        }
+        Matcher matcher = trainPattern.matcher(trainId);
+        return matcher.matches(); // exact match
     }
 
-    // ✅ Reuse: Create bogie list
-    public static List<Bogie> createBogies() {
-        return Arrays.asList(
-                new Bogie("B1", 50),
-                new Bogie("B2", 60),
-                new Bogie("B3", 70),
-                new Bogie("B4", 80)
-        );
-    }
+    // ✅ Validate Cargo Code
+    public static boolean isValidCargoCode(String cargoCode) {
+        if (cargoCode == null || cargoCode.isEmpty()) return false;
 
-    // ✅ CORE METHOD (UC10)
-    public static int calculateTotalCapacity(List<Bogie> bogies) {
-
-        if (bogies == null) return 0;
-
-        return bogies.stream()
-                .map(Bogie::getCapacity)   // extract capacity
-                .reduce(0, Integer::sum); // aggregate
-    }
-
-    // ✅ Optional display
-    public static void displayBogies(List<Bogie> bogies) {
-        bogies.forEach(System.out::println);
+        Matcher matcher = cargoPattern.matcher(cargoCode);
+        return matcher.matches(); // exact match
     }
 
     // ✅ Main (demo only)
     public static void main(String[] args) {
 
-        System.out.println("==========================================");
-        System.out.println("UC10 - Total Seating Capacity باستخدام reduce()");
-        System.out.println("==========================================\n");
+        String trainId = "TRN-1234";
+        String cargoCode = "PET-AB";
 
-        List<Bogie> bogies = createBogies();
+        System.out.println("Train ID: " + trainId +
+                " → " + (isValidTrainID(trainId) ? "Valid" : "Invalid"));
 
-        displayBogies(bogies);
-
-        int total = calculateTotalCapacity(bogies);
-
-        System.out.println("\nTotal Seating Capacity: " + total);
+        System.out.println("Cargo Code: " + cargoCode +
+                " → " + (isValidCargoCode(cargoCode) ? "Valid" : "Invalid"));
     }
 }
