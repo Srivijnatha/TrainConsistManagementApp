@@ -1,80 +1,53 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
+class Bogie {
+    private String type;
+    private int capacity;
+
+    public Bogie(String type, int capacity) {
+        this.type = type;
+        this.capacity = capacity;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    @Override
+    public String toString() {
+        return type + "(" + capacity + ")";
+    }
+}
+
 public class TrainConsistManagementApp {
 
-    // ✅ Bogie Model
-    public static class Bogie {
-        private String name;
-        private int capacity;
-
-        public Bogie(String name, int capacity) {
-            this.name = name;
-            this.capacity = capacity;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getCapacity() {
-            return capacity;
-        }
-
-        @Override
-        public String toString() {
-            return name + " (Capacity: " + capacity + ")";
-        }
-    }
-
-    // ✅ Method 1: Create default bogie list
-    public static List<Bogie> createBogies() {
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("B1", 50));
-        bogies.add(new Bogie("B2", 60));
-        bogies.add(new Bogie("B3", 70));
-        bogies.add(new Bogie("B4", 80));
-        return bogies;
-    }
-
-    // ✅ Method 2: Filter logic (CORE METHOD for testing)
-    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
-
-        if (bogies == null) {
-            return new ArrayList<>(); // handle null safely
-        }
-
+    // 🔹 UC9 Grouping Method (IMPORTANT FOR TESTING)
+    public static Map<String, List<Bogie>> groupBogies(List<Bogie> bogies) {
         return bogies.stream()
-                .filter(b -> b.getCapacity() > threshold) // IMPORTANT: strictly greater
-                .collect(Collectors.toList());
+                .collect(Collectors.groupingBy(Bogie::getType));
     }
 
-    // ✅ Optional: Display method (not used in tests)
-    public static void displayBogies(List<Bogie> bogies) {
-        if (bogies.isEmpty()) {
-            System.out.println("No bogies to display.");
-        } else {
-            bogies.forEach(System.out::println);
-        }
-    }
-
-    // ✅ Main method (just for demo, NOT used in tests)
     public static void main(String[] args) {
 
-        System.out.println("==========================================");
-        System.out.println("UC8 - Filter Passenger Bogies Using Streams");
-        System.out.println("==========================================\n");
+        System.out.println("=== UC9: Group Bogies ===");
 
-        List<Bogie> bogies = createBogies();
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 50));
+        bogies.add(new Bogie("Sleeper", 65));
+        bogies.add(new Bogie("First Class", 30));
+        bogies.add(new Bogie("AC Chair", 80));
 
-        int threshold = 60;
+        Map<String, List<Bogie>> grouped = groupBogies(bogies);
 
-        List<Bogie> filteredBogies = filterBogiesByCapacity(bogies, threshold);
-
-        System.out.println("Bogies with capacity greater than " + threshold + ":\n");
-        displayBogies(filteredBogies);
-
-        System.out.println("\nOriginal Bogie List (unchanged):");
-        displayBogies(bogies);
+        // 🔹 Print grouped data
+        for (String type : grouped.keySet()) {
+            System.out.println(type + " -> " + grouped.get(type));
+        }
     }
 }
