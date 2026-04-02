@@ -1,53 +1,70 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-class Bogie {
-    private String type;
-    private int capacity;
-
-    public Bogie(String type, int capacity) {
-        this.type = type;
-        this.capacity = capacity;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    @Override
-    public String toString() {
-        return type + "(" + capacity + ")";
-    }
-}
-
 public class TrainConsistManagementApp {
 
-    // 🔹 UC9 Grouping Method (IMPORTANT FOR TESTING)
-    public static Map<String, List<Bogie>> groupBogies(List<Bogie> bogies) {
-        return bogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getType));
+    // ✅ Bogie Model
+    public static class Bogie {
+        private String name;
+        private int capacity;
+
+        public Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return name + " (Capacity: " + capacity + ")";
+        }
     }
 
+    // ✅ Reuse: Create bogie list
+    public static List<Bogie> createBogies() {
+        return Arrays.asList(
+                new Bogie("B1", 50),
+                new Bogie("B2", 60),
+                new Bogie("B3", 70),
+                new Bogie("B4", 80)
+        );
+    }
+
+    // ✅ CORE METHOD (UC10)
+    public static int calculateTotalCapacity(List<Bogie> bogies) {
+
+        if (bogies == null) return 0;
+
+        return bogies.stream()
+                .map(Bogie::getCapacity)   // extract capacity
+                .reduce(0, Integer::sum); // aggregate
+    }
+
+    // ✅ Optional display
+    public static void displayBogies(List<Bogie> bogies) {
+        bogies.forEach(System.out::println);
+    }
+
+    // ✅ Main (demo only)
     public static void main(String[] args) {
 
-        System.out.println("=== UC9: Group Bogies ===");
+        System.out.println("==========================================");
+        System.out.println("UC10 - Total Seating Capacity باستخدام reduce()");
+        System.out.println("==========================================\n");
 
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 50));
-        bogies.add(new Bogie("Sleeper", 65));
-        bogies.add(new Bogie("First Class", 30));
-        bogies.add(new Bogie("AC Chair", 80));
+        List<Bogie> bogies = createBogies();
 
-        Map<String, List<Bogie>> grouped = groupBogies(bogies);
+        displayBogies(bogies);
 
-        // 🔹 Print grouped data
-        for (String type : grouped.keySet()) {
-            System.out.println(type + " -> " + grouped.get(type));
-        }
+        int total = calculateTotalCapacity(bogies);
+
+        System.out.println("\nTotal Seating Capacity: " + total);
     }
 }
