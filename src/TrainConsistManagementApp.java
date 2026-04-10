@@ -1,12 +1,15 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class TrainConsistManagementApp {
 
-    // Method to sort bogie names
-    public static String[] sortBogieNames(String[] bogies) {
-        Arrays.sort(bogies); // Built-in optimized sort
-        return bogies;
+    // Linear Search Method
+    public static boolean searchBogieById(String[] bogieIds, String key) {
+        for (int i = 0; i < bogieIds.length; i++) {
+            if (bogieIds[i].equals(key)) { // equality check using equals()
+                return true; // early termination
+            }
+        }
+        return false; // not found
     }
 
     public static void main(String[] args) {
@@ -16,19 +19,23 @@ public class TrainConsistManagementApp {
         int n = scanner.nextInt();
         scanner.nextLine(); // consume newline
 
-        String[] bogies = new String[n];
+        String[] bogieIds = new String[n];
 
-        System.out.println("Enter bogie names:");
+        System.out.println("Enter bogie IDs:");
         for (int i = 0; i < n; i++) {
-            bogies[i] = scanner.nextLine();
+            bogieIds[i] = scanner.nextLine();
         }
 
-        // Sort bogies
-        sortBogieNames(bogies);
+        System.out.println("Enter bogie ID to search:");
+        String key = scanner.nextLine();
 
-        // Display sorted result
-        System.out.println("Sorted Bogie Names:");
-        System.out.println(Arrays.toString(bogies));
+        boolean found = searchBogieById(bogieIds, key);
+
+        if (found) {
+            System.out.println("Bogie ID found in the consist.");
+        } else {
+            System.out.println("Bogie ID not found.");
+        }
 
         scanner.close();
     }
