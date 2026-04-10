@@ -1,50 +1,35 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class TrainConsistManagementApp {
 
-    // ✅ Bubble Sort Method
-    static void bubbleSort(int[] arr) {
-
-        int n = arr.length;
-
-        // Outer loop → number of passes
-        for (int i = 0; i < n - 1; i++) {
-
-            // Inner loop → compare adjacent elements
-            for (int j = 0; j < n - i - 1; j++) {
-
-                // Swap if left > right
-                if (arr[j] > arr[j + 1]) {
-
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
-            }
-        }
+    // Method to sort bogie names
+    public static String[] sortBogieNames(String[] bogies) {
+        Arrays.sort(bogies); // Built-in optimized sort
+        return bogies;
     }
 
-    // ✅ Utility to print array
-    static void printArray(int[] arr) {
-        for (int val : arr) {
-            System.out.print(val + " ");
-        }
-        System.out.println();
-    }
-
-    // ✅ Main method (demo)
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("======================================");
-        System.out.println("UC16 - Bubble Sort (Passenger Capacity)");
-        System.out.println("======================================");
+        System.out.println("Enter number of bogies:");
+        int n = scanner.nextInt();
+        scanner.nextLine(); // consume newline
 
-        int[] capacities = {72, 56, 24, 70, 60};
+        String[] bogies = new String[n];
 
-        System.out.print("Before Sorting: ");
-        printArray(capacities);
+        System.out.println("Enter bogie names:");
+        for (int i = 0; i < n; i++) {
+            bogies[i] = scanner.nextLine();
+        }
 
-        bubbleSort(capacities);
+        // Sort bogies
+        sortBogieNames(bogies);
 
-        System.out.print("After Sorting: ");
-        printArray(capacities);
+        // Display sorted result
+        System.out.println("Sorted Bogie Names:");
+        System.out.println(Arrays.toString(bogies));
+
+        scanner.close();
     }
 }
