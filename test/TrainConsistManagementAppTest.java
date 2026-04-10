@@ -1,68 +1,52 @@
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TrainConsistManagementAppTest {
+class TrainConsistManagementAppTest {
 
     @Test
-    void testBinarySearch_BogieFound() {
-        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+    void testSearch_ThrowsExceptionWhenEmpty() {
+        TrainConsistManagementApp manager =
+                new TrainConsistManagementApp(Collections.emptyList());
 
-        boolean result = TrainConsistManagementApp.binarySearchBogie(bogies, "BG309");
-
-        assertTrue(result);
+        assertThrows(IllegalStateException.class, () -> {
+            manager.searchBogie("BG101");
+        });
     }
 
     @Test
-    void testBinarySearch_BogieNotFound() {
-        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+    void testSearch_AllowsSearchWhenDataExists() {
+        TrainConsistManagementApp manager =
+                new TrainConsistManagementApp(Arrays.asList("BG101", "BG205"));
 
-        boolean result = TrainConsistManagementApp.binarySearchBogie(bogies, "BG999");
-
-        assertFalse(result);
+        assertDoesNotThrow(() -> {
+            manager.searchBogie("BG101");
+        });
     }
 
     @Test
-    void testBinarySearch_FirstElementMatch() {
-        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+    void testSearch_BogieFoundAfterValidation() {
+        TrainConsistManagementApp manager =
+                new TrainConsistManagementApp(Arrays.asList("BG101", "BG205", "BG309"));
 
-        boolean result = TrainConsistManagementApp.binarySearchBogie(bogies, "BG101");
-
-        assertTrue(result);
+        assertTrue(manager.searchBogie("BG205"));
     }
 
     @Test
-    void testBinarySearch_LastElementMatch() {
-        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+    void testSearch_BogieNotFoundAfterValidation() {
+        TrainConsistManagementApp manager =
+                new TrainConsistManagementApp(Arrays.asList("BG101", "BG205", "BG309"));
 
-        boolean result = TrainConsistManagementApp.binarySearchBogie(bogies, "BG550");
-
-        assertTrue(result);
+        assertFalse(manager.searchBogie("BG999"));
     }
 
     @Test
-    void testBinarySearch_SingleElementArray() {
-        String[] bogies = {"BG101"};
+    void testSearch_SingleElementValidCase() {
+        TrainConsistManagementApp manager =
+                new TrainConsistManagementApp(Arrays.asList("BG101"));
 
-        boolean result = TrainConsistManagementApp.binarySearchBogie(bogies, "BG101");
-
-        assertTrue(result);
-    }
-
-    @Test
-    void testBinarySearch_EmptyArray() {
-        String[] bogies = {};
-
-        boolean result = TrainConsistManagementApp.binarySearchBogie(bogies, "BG101");
-
-        assertFalse(result);
-    }
-
-    @Test
-    void testBinarySearch_UnsortedInputHandled() {
-        String[] bogies = {"BG309","BG101","BG550","BG205","BG412"};
-
-        boolean result = TrainConsistManagementApp.binarySearchBogie(bogies, "BG205");
-
-        assertTrue(result);
+        assertTrue(manager.searchBogie("BG101"));
     }
 }
