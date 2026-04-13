@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ public class TrainConsistManagementApp {
         System.out.println("Original Bogie List (Flat):");
         bogies.forEach(System.out::println);
 
-        // Grouping logic: name acts as the key, List<Bogie> acts as the value
         Map<String, List<Bogie>> groupedBogies = bogies.stream()
                 .collect(Collectors.groupingBy(b -> b.name));
 
