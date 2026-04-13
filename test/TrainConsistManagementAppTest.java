@@ -1,52 +1,46 @@
-import org.junit.jupiter.api.Test;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class TrainConsistManagementApp {
 
-class TrainConsistManagementAppTest {
+    static class Bogie {
+        String name;
+        int capacity;
 
-    @Test
-    void testSearch_ThrowsExceptionWhenEmpty() {
-        TrainConsistManagementApp manager =
-                new TrainConsistManagementApp(Collections.emptyList());
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
 
-        assertThrows(IllegalStateException.class, () -> {
-            manager.searchBogie("BG101");
-        });
+        @Override
+        public String toString() {
+            return name + " -> " + capacity;
+        }
     }
 
-    @Test
-    void testSearch_AllowsSearchWhenDataExists() {
-        TrainConsistManagementApp manager =
-                new TrainConsistManagementApp(Arrays.asList("BG101", "BG205"));
+    public static void main(String[] args) {
+        System.out.println("==============================================");
+        System.out.println(" UC8 - Filter Passenger Bogies Using Streams ");
+        System.out.println("==============================================\n");
 
-        assertDoesNotThrow(() -> {
-            manager.searchBogie("BG101");
-        });
-    }
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("General", 90));
 
-    @Test
-    void testSearch_BogieFoundAfterValidation() {
-        TrainConsistManagementApp manager =
-                new TrainConsistManagementApp(Arrays.asList("BG101", "BG205", "BG309"));
+        System.out.println("All Bogies:");
+        bogies.forEach(System.out::println);
 
-        assertTrue(manager.searchBogie("BG205"));
-    }
+        // Functional Pipeline: stream() -> filter() -> collect()
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
 
-    @Test
-    void testSearch_BogieNotFoundAfterValidation() {
-        TrainConsistManagementApp manager =
-                new TrainConsistManagementApp(Arrays.asList("BG101", "BG205", "BG309"));
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        filteredBogies.forEach(System.out::println);
 
-        assertFalse(manager.searchBogie("BG999"));
-    }
-
-    @Test
-    void testSearch_SingleElementValidCase() {
-        TrainConsistManagementApp manager =
-                new TrainConsistManagementApp(Arrays.asList("BG101"));
-
-        assertTrue(manager.searchBogie("BG101"));
+        System.out.println("\nUC8 filtering completed...");
     }
 }
